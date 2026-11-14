@@ -71,12 +71,14 @@ By hand ([`PitfallsTest`](src/test/java/dev/codevx/patterns/observer/PitfallsTes
 
 1. **The order no longer knows its listeners, but it still waits for them.** The loop runs in the caller's thread:
    a listener that throws fails `pay()` and skips every listener after it.
-2. **A listener that unsubscribes during the loop** throws `ConcurrentModificationException` from an `ArrayList`.
-   Keep listeners in a `CopyOnWriteArrayList`.
+2. **A listener that unsubscribes during the loop** breaks an `ArrayList` one of two ways: a
+   `ConcurrentModificationException`, or, when it was second to last, no error at all and the last listener is
+   silently skipped. Keep listeners in a `CopyOnWriteArrayList`: the loop walks a snapshot.
 
 With Spring ([`SpringPitfallsTest`](src/test/java/dev/codevx/patterns/observer/SpringPitfallsTest.java)):
 
 3. **A plain `@EventListener` runs in the payment's thread and transaction.** Its exception rolls the payment back.
+   For a listener that mustn't be able to do that, `@Async` moves it to another thread.
 4. **A plain `@EventListener` runs before the commit**, so it can send an email for a payment that then rolls back.
    `@TransactionalEventListener` waits for the commit (its default phase) and does nothing on a rollback.
 5. **An `@Async` listener's exception never reaches `pay()`.** Without an `AsyncUncaughtExceptionHandler`

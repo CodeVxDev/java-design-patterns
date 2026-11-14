@@ -8,16 +8,21 @@ import dev.codevx.patterns.strategy.spring.PayLater;
 import dev.codevx.patterns.strategy.spring.PaymentStrategy;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 
-/** Each pitfall shows the failure first, then the fix. */
+/** Numbered as in the README: each pitfall shows the failure first, then the fix. */
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("Strategy pitfalls")
 class PitfallsTest {
 
   @Test
-  @DisplayName("Pitfall: map.get(type) returns null for an unknown type, and the NPE says nothing about it")
+  @Order(1)
+  @DisplayName("1. Pitfall: map.get(type) returns null for an unknown type, and the NPE says nothing about it")
   void rawLookupThrowsNpe() {
     Map<String, PaymentStrategy> strategies = Map.of("payLater", new PayLater());
     assertThatThrownBy(() -> strategies.get("upi").pay(4900))
@@ -25,7 +30,8 @@ class PitfallsTest {
   }
 
   @Test
-  @DisplayName("Fix: check the lookup and fail with the unknown type and the known ones")
+  @Order(2)
+  @DisplayName("1. Fix: check the lookup and fail with the unknown type and the known ones")
   void guardedLookupNamesTheType() {
     Checkout checkout = new Checkout(Map.of("payLater", new PayLater()));
     assertThatThrownBy(() -> checkout.pay("upi", 4900))
@@ -34,7 +40,8 @@ class PitfallsTest {
   }
 
   @Test
-  @DisplayName("Pitfall: the key is the bean name, so renaming the class breaks callers sending \"payLater\"")
+  @Order(3)
+  @DisplayName("2. Pitfall: the key is the bean name, so renaming the class breaks callers sending \"payLater\"")
   void renamingTheClassChangesTheKey() {
     try (var context = new AnnotationConfigApplicationContext(BuyNowPayLater.class)) {
       Map<String, PaymentStrategy> beans = context.getBeansOfType(PaymentStrategy.class);
@@ -45,7 +52,8 @@ class PitfallsTest {
   }
 
   @Test
-  @DisplayName("Fix: name the bean explicitly when the key comes from a request or a database row")
+  @Order(4)
+  @DisplayName("2. Fix: name the bean explicitly when the key comes from a request or a database row")
   void explicitNameSurvivesARename() {
     try (var context = new AnnotationConfigApplicationContext(RenamedWithStableKey.class)) {
       Map<String, PaymentStrategy> beans = context.getBeansOfType(PaymentStrategy.class);

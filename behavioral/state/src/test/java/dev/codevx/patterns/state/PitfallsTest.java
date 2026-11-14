@@ -7,6 +7,7 @@ import dev.codevx.patterns.state.handrolled.Atm;
 import dev.codevx.patterns.state.handrolled.HasPin;
 import dev.codevx.patterns.state.handrolled.Idle;
 import dev.codevx.patterns.state.handrolled.NoCash;
+import dev.codevx.patterns.state.handrolled.NotAllowed;
 import dev.codevx.patterns.state.spring.OrderState;
 import dev.codevx.patterns.state.spring.OrderStates;
 import dev.codevx.patterns.state.spring.Status;
@@ -14,14 +15,19 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
-/** Each pitfall shows the failure first, then the fix. */
+/** Numbered as in the README: each pitfall shows the failure first, then the fix. */
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("State pitfalls")
 class PitfallsTest {
 
   @Test
-  @DisplayName("Pitfall: a state that returns `this` for a forbidden call hides the refusal from the caller")
+  @Order(1)
+  @DisplayName("1. Pitfall: a state that returns `this` for a forbidden call hides the refusal from the caller")
   void silentRefusal() {
     interface Light {
       Light press();
@@ -36,7 +42,19 @@ class PitfallsTest {
   }
 
   @Test
-  @DisplayName("Pitfall: a shared state instance that keeps data shares it with every object using it")
+  @Order(2)
+  @DisplayName("1. Fix: refuse out loud, with the reason, and leave the state as it was")
+  void refuseOutLoud() {
+    Atm atm = new Atm(1);
+    assertThatThrownBy(atm::enterPin)
+        .isInstanceOf(NotAllowed.class)
+        .hasMessage("Idle: insert a card first");
+    assertThat(atm.state()).isSameAs(Idle.INSTANCE);
+  }
+
+  @Test
+  @Order(3)
+  @DisplayName("2. Pitfall: a shared state instance that keeps data shares it with every object using it")
   void sharedStateWithData() {
     class HasCardCountingPins { // a state that keeps per-ATM data in a field
       int wrongPins;
@@ -59,7 +77,8 @@ class PitfallsTest {
   }
 
   @Test
-  @DisplayName("Fix: keep the data in the context, so the states hold nothing and one instance serves all")
+  @Order(4)
+  @DisplayName("2. Fix: keep the data in the context, so the states hold nothing and one instance serves all")
   void dataInTheContext() {
     Atm a = new Atm(1);
     Atm b = new Atm(2);
@@ -78,21 +97,24 @@ class PitfallsTest {
   enum StatusV2 { CREATED, PAYMENT_PENDING, PAID, SHIPPED } // a status added in the middle
 
   @Test
-  @DisplayName("Pitfall: storing the ordinal, then adding a status in the middle, changes what old rows mean")
+  @Order(5)
+  @DisplayName("3. Pitfall: storing the ordinal, then adding a status in the middle, changes what old rows mean")
   void ordinalShifts() {
     int storedLastYear = StatusV1.PAID.ordinal(); // JPA's default @Enumerated(ORDINAL) stores 1
     assertThat(StatusV2.values()[storedLastYear]).isEqualTo(StatusV2.PAYMENT_PENDING);
   }
 
   @Test
-  @DisplayName("Fix: store the name (@Enumerated(EnumType.STRING)); a new status doesn't move the old ones")
+  @Order(6)
+  @DisplayName("3. Fix: store the name (@Enumerated(EnumType.STRING)); a new status doesn't move the old ones")
   void nameIsStable() {
     String storedLastYear = StatusV1.PAID.name();
     assertThat(StatusV2.valueOf(storedLastYear)).isEqualTo(StatusV2.PAID);
   }
 
   @Test
-  @DisplayName("Pitfall: a status with no state bean fails on the first order that reaches it, in production")
+  @Order(7)
+  @DisplayName("4. Pitfall: a status with no state bean fails on the first order that reaches it, in production")
   void missingBeanFailsLate() {
     Map<Status, OrderState> byStatus = new EnumMap<>(Status.class);
     byStatus.put(Status.CREATED, () -> Status.CREATED); // SHIPPED was added, its bean wasn't
@@ -101,7 +123,8 @@ class PitfallsTest {
   }
 
   @Test
-  @DisplayName("Fix: check at startup that every status has exactly one bean")
+  @Order(8)
+  @DisplayName("4. Fix: check at startup that every status has exactly one bean")
   void missingBeanFailsAtStartup() {
     List<OrderState> beans = List.of(() -> Status.CREATED, () -> Status.PAID, () -> Status.CANCELLED);
     assertThatThrownBy(() -> new OrderStates(beans))

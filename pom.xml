@@ -33,20 +33,24 @@
 
   <build>
     <plugins>
-      <!-- Print each test's @DisplayName, so `./mvnw test` reads as a revision checklist. -->
+      <!-- Print every test's @DisplayName as a tree, so `./mvnw test` reads as a revision checklist. -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>me.fabriciorby</groupId>
+            <artifactId>maven-surefire-junit5-tree-reporter</artifactId>
+            <version>2.2.0</version>
+          </dependency>
+        </dependencies>
         <configuration>
-          <consoleOutputReporter
-              implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5ConsoleOutputReporter">
-            <usePhrasedFileName>true</usePhrasedFileName>
+          <reportFormat>plain</reportFormat>
+          <consoleOutputReporter>
+            <disable>true</disable>
           </consoleOutputReporter>
           <statelessTestsetInfoReporter
-              implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5StatelessTestsetInfoTreeReporter">
-            <usePhrasedClassNameInRunning>true</usePhrasedClassNameInRunning>
-            <usePhrasedClassNameInTestCaseSummary>true</usePhrasedClassNameInTestCaseSummary>
-          </statelessTestsetInfoReporter>
+              implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5StatelessTestsetInfoTreeReporter"/>
         </configuration>
       </plugin>
     </plugins>

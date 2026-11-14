@@ -9,7 +9,9 @@ import dev.codevx.patterns.observer.spring.OrderPaid;
 import dev.codevx.patterns.observer.spring.Orders;
 import java.time.Duration;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
@@ -20,11 +22,12 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 /**
- * Each pitfall shows the failure first, then the fix. Extra listeners (below) react only to their own
+ * Numbered as in the README: each pitfall shows the failure first, then the fix. Extra listeners (below) react only to their own
  * order ids, so they don't disturb the other tests.
  */
 @SpringBootTest(classes = ObserverApp.class)
 @Import(SpringPitfallsTest.TestListeners.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayName("Observer pitfalls, with Spring")
 class SpringPitfallsTest {
 
@@ -33,7 +36,8 @@ class SpringPitfallsTest {
   @Autowired ApplicationEventPublisher publisher;
 
   @Test
-  @DisplayName("Pitfall: a plain @EventListener that throws rolls the payment back")
+  @org.junit.jupiter.api.Order(1)
+  @DisplayName("3. Pitfall: a plain @EventListener that throws rolls the payment back")
   void throwingListenerRollsBack() {
     orders.create("down-1");
 
@@ -42,27 +46,8 @@ class SpringPitfallsTest {
   }
 
   @Test
-  @DisplayName("Pitfall: a plain @EventListener runs before the commit, so it acts on a payment that rolls back")
-  void plainListenerRunsBeforeCommit() {
-    orders.create("down-2");
-
-    assertThatThrownBy(() -> orders.pay("down-2")).hasMessage("email is down");
-    assertThat(activity.find("plain down-2")).isPresent(); // it ran...
-    assertThat(orders.isPaid("down-2")).isFalse(); // ...for a payment that never happened
-  }
-
-  @Test
-  @DisplayName("Fix: a @TransactionalEventListener runs only after the commit, so a rollback sends nothing")
-  void afterCommitListenerSkipsRollback() throws InterruptedException {
-    orders.create("down-3");
-
-    assertThatThrownBy(() -> orders.pay("down-3")).hasMessage("email is down");
-    assertThat(activity.await("email down-3", Duration.ofMillis(500))).isEmpty();
-    assertThat(activity.find("points down-3")).isEmpty();
-  }
-
-  @Test
-  @DisplayName("Fix: an @Async listener that fails can't fail pay()")
+  @org.junit.jupiter.api.Order(2)
+  @DisplayName("3. Fix: an @Async listener that fails can't fail pay()")
   void asyncFailureDoesNotFailPay() {
     orders.create("async-1");
 
@@ -72,7 +57,30 @@ class SpringPitfallsTest {
   }
 
   @Test
-  @DisplayName("Pitfall: an @Async listener's exception never reaches the caller; only a handler sees it")
+  @org.junit.jupiter.api.Order(3)
+  @DisplayName("4. Pitfall: a plain @EventListener runs before the commit, so it acts on a payment that rolls back")
+  void plainListenerRunsBeforeCommit() {
+    orders.create("down-2");
+
+    assertThatThrownBy(() -> orders.pay("down-2")).hasMessage("email is down");
+    assertThat(activity.find("plain down-2")).isPresent(); // it ran...
+    assertThat(orders.isPaid("down-2")).isFalse(); // ...for a payment that never happened
+  }
+
+  @Test
+  @org.junit.jupiter.api.Order(4)
+  @DisplayName("4. Fix: a @TransactionalEventListener runs only after the commit, so a rollback sends nothing")
+  void afterCommitListenerSkipsRollback() throws InterruptedException {
+    orders.create("down-3");
+
+    assertThatThrownBy(() -> orders.pay("down-3")).hasMessage("email is down");
+    assertThat(activity.await("email down-3", Duration.ofMillis(500))).isEmpty();
+    assertThat(activity.find("points down-3")).isEmpty();
+  }
+
+  @Test
+  @org.junit.jupiter.api.Order(5)
+  @DisplayName("5. Pitfall: an @Async listener's exception never reaches the caller; only a handler sees it")
   void asyncFailureIsSilent() throws InterruptedException {
     orders.create("async-2");
     orders.pay("async-2"); // returns normally
@@ -82,7 +90,8 @@ class SpringPitfallsTest {
   }
 
   @Test
-  @DisplayName("Pitfall: with no transaction, a @TransactionalEventListener is skipped without a word")
+  @org.junit.jupiter.api.Order(6)
+  @DisplayName("6. Pitfall: with no transaction, a @TransactionalEventListener is skipped without a word")
   void noTransactionNoEvent() throws InterruptedException {
     publisher.publishEvent(new OrderPaid("no-tx-1")); // outside any transaction
 
@@ -91,7 +100,8 @@ class SpringPitfallsTest {
   }
 
   @Test
-  @DisplayName("Fix: fallbackExecution = true runs it anyway when there's no transaction")
+  @org.junit.jupiter.api.Order(7)
+  @DisplayName("6. Fix: fallbackExecution = true runs it anyway when there's no transaction")
   void fallbackExecutionRuns() {
     publisher.publishEvent(new OrderPaid("no-tx-2"));
 

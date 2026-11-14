@@ -14,8 +14,10 @@ video or a search, not for us.
 - Every package except `spring/` is self-contained (no imports from sibling packages) and has a `Demo` main, so
   `java src/main/java/.../Demo.java` runs it with no build. `scripts/run-demos.sh` checks all of them.
 - Tests: `HandRolledTest`, `SpringTest`, `PitfallsTest` (and `SpringPitfallsTest` when the Spring pitfalls need
-  their own listeners or config). Every test has a full-sentence `@DisplayName`; pitfalls start with `Pitfall:`
-  and are followed by a `Fix:` test. A pitfall in a README is either tested or listed under "Not in the tests".
+  their own listeners or config). Every test has a full-sentence `@DisplayName`. Pitfall tests carry the
+  README's number (`"2. Pitfall: …"`, then `"2. Fix: …"` when the fix is code) and run in that order
+  (`@TestMethodOrder(OrderAnnotation)` + `@Order`). A pitfall in a README is either tested or listed under "Not
+  in the tests".
 - Versions come from the Spring Boot parent in the root `pom.xml` (exact version); add no versions in modules.
   Java 25. No Lombok: write the constructor and say in a comment that `@RequiredArgsConstructor` generates it.
 - Code in a module should match the episode's on-screen code where it can (`CodeVxBlog/episodes/<slug>/code/`),
@@ -34,4 +36,5 @@ seconds, Spot it in LLD interviews. Keep it to a 2-minute read.
 2. Write the code and tests, then the README.
 3. Update the root `README.md` table (Code ✓, video and post links), and check `docs/cheat-sheet.md`,
    `docs/confusions.md` and `docs/in-spring-and-jdk.md` still match.
-4. `./mvnw verify && ./scripts/run-demos.sh` must pass (CI runs both).
+4. `./mvnw verify && ./scripts/run-demos.sh` must pass (CI runs both). `mvnw` is pinned to Maven 3.9.16;
+   the test tree output comes from `maven-surefire-junit5-tree-reporter` (root `pom.xml`).

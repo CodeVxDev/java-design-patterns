@@ -9,7 +9,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  *
  * <p>The loop runs in the caller's thread: pay() returns only after the last listener, and a listener that
  * throws fails pay() and skips the listeners after it. CopyOnWriteArrayList lets a listener unsubscribe
- * while the loop runs; a plain ArrayList would throw ConcurrentModificationException.
+ * while the loop runs; a plain ArrayList would throw ConcurrentModificationException, or silently skip the
+ * next listener.
  */
 public class Orders {
   private final List<OrderListener> listeners = new CopyOnWriteArrayList<>();
