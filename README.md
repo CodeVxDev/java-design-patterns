@@ -1,6 +1,6 @@
 # Java design patterns: runnable, with Spring and the pitfalls
 
-The code behind the [CodeVx](https://codevx.dev) design-pattern videos
+The code behind the [CodeVxDev](https://codevx.dev) design-pattern videos
 ([YouTube](https://youtube.com/@CodeVxDev) · [Instagram](https://instagram.com/codevxdev)), and a revision guide
 for interviews.
 
