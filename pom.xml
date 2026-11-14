@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- Spring Boot's parent pins every Spring, JUnit, AssertJ, H2 and plugin version, so the modules list
+       dependencies without versions. Bump this one line to upgrade everything. -->
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>4.1.2</version>
+    <relativePath/>
+  </parent>
+
+  <groupId>dev.codevx</groupId>
+  <artifactId>java-design-patterns</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>Java design patterns: runnable, with Spring and the pitfalls</name>
+
+  <properties>
+    <java.version>25</java.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <!-- One module per pattern, grouped by GoF category. Add a pattern here when its folder exists. -->
+  <modules>
+    <module>behavioral/strategy</module>
+    <module>behavioral/state</module>
+    <module>behavioral/observer</module>
+  </modules>
+
+  <build>
+    <plugins>
+      <!-- Print each test's @DisplayName, so `./mvnw test` reads as a revision checklist. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <consoleOutputReporter
+              implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5ConsoleOutputReporter">
+            <usePhrasedFileName>true</usePhrasedFileName>
+          </consoleOutputReporter>
+          <statelessTestsetInfoReporter
+              implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5StatelessTestsetInfoTreeReporter">
+            <usePhrasedClassNameInRunning>true</usePhrasedClassNameInRunning>
+            <usePhrasedClassNameInTestCaseSummary>true</usePhrasedClassNameInTestCaseSummary>
+          </statelessTestsetInfoReporter>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
