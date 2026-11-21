@@ -29,6 +29,7 @@
     <module>behavioral/strategy</module>
     <module>behavioral/state</module>
     <module>behavioral/observer</module>
+    <module>structural/proxy</module>
   </modules>
 
   <build>
