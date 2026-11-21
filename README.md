@@ -34,7 +34,7 @@ Every pattern here:
 | 3   | [Observer](behavioral/observer)         | Behavioral | Chain, Mediator, pub/sub | ✓    | Soon                                           | [Read](https://codevx.dev/post/observer-pattern-in-java)    |
 | 4   | Chain of Responsibility                 | Behavioral | Observer, Decorator     |      |                                                |                                                             |
 | 5   | Decorator                               | Structural | Chain, Proxy            |      |                                                |                                                             |
-| 6   | Proxy                                   | Structural | Decorator, Adapter      |      |                                                |                                                             |
+| 6   | [Proxy](structural/proxy)               | Structural | Decorator, Adapter      | ✓    | Soon                                           | [Read](https://codevx.dev/post/proxy-pattern-in-java)       |
 | 7   | Adapter                                 | Structural | Proxy, Facade, Bridge   |      |                                                |                                                             |
 | 8   | Facade                                  | Structural | Adapter, Mediator       |      |                                                |                                                             |
 | 9   | Mediator                                | Behavioral | Facade, Observer        |      |                                                |                                                             |
