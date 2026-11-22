@@ -29,6 +29,8 @@
     <module>behavioral/strategy</module>
     <module>behavioral/state</module>
     <module>behavioral/observer</module>
+    <module>behavioral/chain-of-responsibility</module>
+    <module>structural/decorator</module>
     <module>structural/proxy</module>
   </modules>
 
