@@ -1,6 +1,6 @@
 # Proxy
 
-**Structural** · Episode 6 · Video coming soon ·
+**Structural** · Episode 6 · [Video](https://youtube.com/shorts/V4Af8c32bY0) ·
 [Blog post](https://codevx.dev/post/proxy-pattern-in-java)
 
 > A stand-in with the same interface as the real object, which controls access to it: it decides if, when and how

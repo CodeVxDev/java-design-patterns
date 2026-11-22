@@ -9,8 +9,8 @@ textbook example. A dash means there is no common example worth naming.
 | State                   | —                                                                      | Spring Statemachine; in practice, an enum status column with behaviour per value      |
 | Observer                | `PropertyChangeListener`, `java.util.concurrent.Flow`                  | `ApplicationEventPublisher`, `@EventListener`, `@TransactionalEventListener`          |
 | Chain of Responsibility | Servlet `Filter` / `FilterChain`                                       | Spring Security's `SecurityFilterChain`, MVC `HandlerInterceptor`s                    |
-| Decorator               | `BufferedInputStream`, `Collections.unmodifiableList`, `synchronizedList` | `HttpServletRequestWrapper` subclasses such as `ContentCachingRequestWrapper`      |
-| Proxy                   | `java.lang.reflect.Proxy`                                              | Spring AOP behind `@Transactional`, `@Async`, `@Cacheable`; Spring Data repositories; Hibernate lazy loading |
+| Decorator               | `BufferedInputStream`, `GZIPInputStream`, `Collections.synchronizedList` | `@Bean` methods that return a stack of wrappers; `TaskDecorator`; `HttpServletRequestWrapper` subclasses such as `ContentCachingRequestWrapper` |
+| Proxy                   | `java.lang.reflect.Proxy`; `Collections.unmodifiableList` (it refuses writes) | Spring AOP behind `@Transactional`, `@Async`, `@Cacheable`; Spring Data repositories; Hibernate lazy loading |
 | Adapter                 | `Arrays.asList`, `InputStreamReader`                                   | Spring MVC `HandlerAdapter`                                                           |
 | Facade                  | `java.nio.file.Files`                                                  | `JdbcTemplate`, `RestClient`; SLF4J                                                   |
 | Mediator                | —                                                                      | Saga orchestrators; MVC's `DispatcherServlet` coordinating handlers and resolvers     |

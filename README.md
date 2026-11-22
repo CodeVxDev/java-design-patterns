@@ -31,10 +31,10 @@ Every pattern here:
 | --- | --------------------------------------- | ---------- | ----------------------- | ---- | ---------------------------------------------- | ----------------------------------------------------------- |
 | 1   | [Strategy](behavioral/strategy)         | Behavioral | State, Template Method  | ✓    | [Watch](https://youtube.com/shorts/5QN0onacLTc) | [Read](https://codevx.dev/post/strategy-pattern-in-java)    |
 | 2   | [State](behavioral/state)               | Behavioral | Strategy                | ✓    | [Watch](https://youtube.com/shorts/IPporXbhNcc) | [Read](https://codevx.dev/post/state-pattern-in-java)       |
-| 3   | [Observer](behavioral/observer)         | Behavioral | Chain, Mediator, pub/sub | ✓    | Soon                                           | [Read](https://codevx.dev/post/observer-pattern-in-java)    |
-| 4   | Chain of Responsibility                 | Behavioral | Observer, Decorator     |      |                                                |                                                             |
-| 5   | Decorator                               | Structural | Chain, Proxy            |      |                                                |                                                             |
-| 6   | [Proxy](structural/proxy)               | Structural | Decorator, Adapter      | ✓    | Soon                                           | [Read](https://codevx.dev/post/proxy-pattern-in-java)       |
+| 3   | [Observer](behavioral/observer)         | Behavioral | Chain, Mediator, pub/sub | ✓    | [Watch](https://youtube.com/shorts/FDtWvAIfF-s) | [Read](https://codevx.dev/post/observer-pattern-in-java)    |
+| 4   | [Chain of Responsibility](behavioral/chain-of-responsibility) | Behavioral | Observer, Decorator | ✓ | [Watch](https://youtube.com/shorts/NVseSXuwiDA) | [Read](https://codevx.dev/post/chain-of-responsibility-pattern-in-java) |
+| 5   | [Decorator](structural/decorator)       | Structural | Chain, Proxy            | ✓    | [Watch](https://youtube.com/shorts/RdtUKvyH8i8) | [Read](https://codevx.dev/post/decorator-pattern-in-java)   |
+| 6   | [Proxy](structural/proxy)               | Structural | Decorator, Adapter      | ✓    | [Watch](https://youtube.com/shorts/V4Af8c32bY0) | [Read](https://codevx.dev/post/proxy-pattern-in-java)       |
 | 7   | Adapter                                 | Structural | Proxy, Facade, Bridge   |      |                                                |                                                             |
 | 8   | Facade                                  | Structural | Adapter, Mediator       |      |                                                |                                                             |
 | 9   | Mediator                                | Behavioral | Facade, Observer        |      |                                                |                                                             |

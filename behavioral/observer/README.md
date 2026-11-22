@@ -1,6 +1,6 @@
 # Observer
 
-**Behavioral** · Episode 3 · Video coming soon ·
+**Behavioral** · Episode 3 · [Video](https://youtube.com/shorts/FDtWvAIfF-s) ·
 [Blog post](https://codevx.dev/post/observer-pattern-in-java)
 
 > When something happens, the object it happened to announces it once. Any number of listeners react, and the
